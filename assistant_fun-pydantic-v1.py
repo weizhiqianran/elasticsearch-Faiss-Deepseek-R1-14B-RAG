@@ -1,5 +1,5 @@
 from main import *
-from pydantic import BaseModel, Field, field_validator  # 确保导入 field_validator
+from pydantic import BaseModel, validator  # 使用 validator 替代 field_validator
 from typing import List, Dict, Any
 import hashlib
 import json
@@ -52,11 +52,11 @@ def safe_get_metadata(doc, default=None) -> dict:
 class MergedRetrievalResult(BaseModel):
     """统一检索结果结构"""
     content: str
-    metadata: dict = Field(default_factory=dict)  # 使用 default_factory 指定默认值
+    metadata: dict = {}
     score: float
     source: str
 
-    @field_validator('metadata', mode='before')  # 使用 field_validator，mode='before' 表示在验证前处理
+    @validator('metadata', pre=True)  # 使用 validator 替代 field_validator，pre=True 等价于 mode='before'
     def validate_metadata(cls, v):
         if isinstance(v, str):
             return {"raw_meta": v}  # 自动转换字符串元数据
