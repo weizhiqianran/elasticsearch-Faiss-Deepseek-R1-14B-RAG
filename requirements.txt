@@ -133,5 +133,5 @@ yarl
 zstandard
 
 pydantic
-faiss-gpu
+# faiss-gpu
 streamlit
